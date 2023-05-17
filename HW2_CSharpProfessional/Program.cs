@@ -8,9 +8,11 @@ namespace HW2_CSharpProfessional
             // проверка соединения
             if (CheckConnectionDB.CheckConnectionToDB())
             {
-                // создание базы
-                CreateTables.CreateDB();
+                // п.1 Создать базу данных
+                CreateDB.CreateTables();
 
+                // п.2 Написать скрипт заполнения таблиц данными
+                CreateDB.InsertInDB();
             }
             else
             {
