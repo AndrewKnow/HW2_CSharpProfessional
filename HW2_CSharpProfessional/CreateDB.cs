@@ -9,6 +9,15 @@ namespace HW2_CSharpProfessional
 {
     public static class CreateDB
     {
+
+        /// <summary>
+        /// Заполнение таблиц базы произволными пятью значениями, содержащими рандомный FOREIGN KEY
+        /// </summary>
+        /// <param name="salesmanMinId">Минимальный ID в таблице salesman</param>
+        /// <param name="salesmanMaxId">Максимальный ID в таблице salesman</param>
+        /// <param name="productMinId">Минимальный ID в таблице product</param>
+        /// <param name="productMaxId">Максимальный ID в таблице product</param>
+
         public static void InsertInDB()
         {
             var connectionString = DBConnection.ConnectionString();
@@ -19,23 +28,48 @@ namespace HW2_CSharpProfessional
             {
                 Random rnd = new();
 
-                var sql = @"INSERT INTO salesman(shop) VALUES (@shop);";
-                connection.QueryFirstOrDefault<Salesman>(sql, new { 
+                var sql1 = @"INSERT INTO salesman(shop) VALUES (@shop);";
+                connection.QueryFirstOrDefault<Salesman>(sql1, new { 
                     @shop = $"Магазин {i}" });
-          
-                var sql2 = @"INSERT INTO product(salesman_id, name, price) VALUES (@salesmanId, @name, @price,);";
-                connection.QueryFirstOrDefault<Product>(sql2, new { 
-                    @salesmanId = $"Магазин {rnd.Next(1, 5)}", 
-                    @name = $"Товар {i}", 
-                    @price = $"Цена {i}" });
+            }
 
+            var sqlSalesmanMinId = "SELECT MIN(Id) From public.salesman;";
+            var sqlSalesmanMaxId = "SELECT MAX(Id) From public.salesman;";
+
+            int salesmanMinId = connection.ExecuteScalar<int>(sqlSalesmanMinId, null);
+            int salesmanMaxId = connection.ExecuteScalar<int>(sqlSalesmanMaxId, null);
+
+            for (int i = 1; i <= 5; i++)
+            {
+                Random rnd = new();
+
+                var sql2 = @"INSERT INTO product(salesman_id, name, price) VALUES (@salesmanId, @name, @price);";
+                connection.QueryFirstOrDefault<Product>(sql2, new
+                {
+                    @salesmanId = rnd.Next(salesmanMinId, salesmanMaxId),
+                    @name = $"Товар {i}",
+                    @price = rnd.Next(100, 1000)
+                });
+            }
+
+            var sqlProductMinId = "SELECT MIN(Id) From public.product;";
+            var sqlProductMaxId = "SELECT MAX(Id) From public.product;";
+
+            int productMinId = connection.ExecuteScalar<int>(sqlProductMinId, null);
+            int productMaxId = connection.ExecuteScalar<int>(sqlProductMaxId, null);
+
+            for (int i = 1; i <= 5; i++)
+            {
+                Random rnd = new();
                 var sql3 = @"INSERT INTO buyer(first_name, second_name, email, product_id, count) VALUES (@firstName, @secondName, @email, @productId, @count);";
-                connection.QueryFirstOrDefault<Buyer>(sql3, new { 
-                    @firstName = $"Имя {i}", 
-                    @secondName = $"Фамилия {i}", 
-                    @email = $"email{i}@otus.ru", 
-                    @productId = rnd.Next(1, 5), 
-                    @count = rnd.Next(1, 5) });
+                connection.QueryFirstOrDefault<Buyer>(sql3, new
+                {
+                    @firstName = $"Имя {i}",
+                    @secondName = $"Фамилия {i}",
+                    @email = $"email{i}@otus.ru",
+                    @productId = rnd.Next(productMinId, productMaxId),
+                    @count = rnd.Next(1, 3)
+                });
             }
         }
 
@@ -60,7 +94,6 @@ namespace HW2_CSharpProfessional
                             shop            CHARACTER VARYING(255)      NOT NULL,
                           
                             CONSTRAINT salesman_pkey PRIMARY KEY (id),
-                            CONSTRAINT salesman_shop_unique UNIQUE (shop)
                         );
                         
                         CREATE INDEX salesman_shop_idx ON salesman(shop);
@@ -97,7 +130,6 @@ namespace HW2_CSharpProfessional
 
                             CONSTRAINT buyer_pkey PRIMARY KEY (id),
                             CONSTRAINT buyer_fk_product_id FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE SET NULL,
-                            CONSTRAINT buyer_email_unique UNIQUE (email)
                         );
                         CREATE UNIQUE INDEX buyer_email_unq_idx ON buyer(lower(email));
                         ";

@@ -13,6 +13,10 @@ namespace HW2_CSharpProfessional
 
                 // п.2 Написать скрипт заполнения таблиц данными
                 CreateDB.InsertInDB();
+
+                // п.3 Выводить содержимое всех таблиц
+                SelectFromDB.OutputToTheConsole();
+
             }
             else
             {
