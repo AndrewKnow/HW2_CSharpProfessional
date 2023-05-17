@@ -1,10 +1,21 @@
-﻿namespace HW2_CSharpProfessional
+﻿
+namespace HW2_CSharpProfessional
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("Hello, World!");
+            // проверка соединения
+            if (CheckConnectionDB.CheckConnectionToDB())
+            {
+                // создание базы
+                CreateTables.CreateDB();
+
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
         }
     }
 }
