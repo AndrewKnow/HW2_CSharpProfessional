@@ -18,7 +18,6 @@ namespace HW2_CSharpProfessional
                 SelectFromDB.OutputToTheConsole();
 
                 // п.4 Возможность добавления в таблицу на выбор
-
                 while (true)
                 {
                     Console.WriteLine();
