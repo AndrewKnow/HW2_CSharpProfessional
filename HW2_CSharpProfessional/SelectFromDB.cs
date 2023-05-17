@@ -16,6 +16,7 @@ namespace HW2_CSharpProfessional
             connection.Open();
 
             Console.WriteLine("Таблица buyer:");
+            Console.WriteLine("----------------------------------------------");
             var sql1 = "SELECT* From public.buyer;";
             using var cmd1 = new NpgsqlCommand(sql1, connection);
             var reader1 = cmd1.ExecuteReader();
@@ -35,6 +36,7 @@ namespace HW2_CSharpProfessional
             reader1.Close();
 
             Console.WriteLine("Таблица salesman:");
+            Console.WriteLine("----------------------------------------------");
             var sql2 = "SELECT* From public.salesman;";
             using var cmd2 = new NpgsqlCommand(sql2, connection);
             var reader2 = cmd2.ExecuteReader();
@@ -50,6 +52,7 @@ namespace HW2_CSharpProfessional
             reader2.Close();
 
             Console.WriteLine("Таблица product:");
+            Console.WriteLine("----------------------------------------------");
             var sql3 = "SELECT* From public.product;";
             using var cmd3 = new NpgsqlCommand(sql3, connection);
             var reader3 = cmd3.ExecuteReader();

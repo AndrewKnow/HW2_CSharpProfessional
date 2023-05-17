@@ -22,7 +22,7 @@ namespace HW2_CSharpProfessional
                 while (true)
                 {
                     Console.WriteLine();
-                    Console.WriteLine("Ввод в таблицу:\n 0 - Выход из программы \n 1 - salesman \n 2 - buyer\n 3 product");
+                    Console.WriteLine("Ввод в таблицу:\n 0 - Выход из программы \n 1 - salesman \n 2 - buyer\n 3 - product\n 4 - Список всех таблиц");
 
                     var num = Console.ReadLine();
 
@@ -47,6 +47,11 @@ namespace HW2_CSharpProfessional
                         if (intNum == 3)
                         {
                             InsertIntoDB.InsertInTable("product");
+                        }
+
+                        if (intNum == 4)
+                        {
+                            SelectFromDB.OutputToTheConsole();
                         }
                     }
                 }

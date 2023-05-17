@@ -17,7 +17,7 @@ namespace HW2_CSharpProfessional
 
             if (table == "salesman")
             {
-                sql = @"INSERT INTO product(shop) VALUES (:shop);";
+                sql = @"INSERT INTO salesman(shop) VALUES (:shop);";
 
                 var connectionString = DBConnection.ConnectionString();
                 using var connection = new NpgsqlConnection(connectionString);
@@ -53,15 +53,25 @@ namespace HW2_CSharpProfessional
                 Console.WriteLine("Введите стоимость товара:");
                 var price = Console.ReadLine();
 
-                using var cmd = new NpgsqlCommand(sql, connection);
-                var parameters = cmd.Parameters;
-                parameters.Add(new NpgsqlParameter(":salesmanId", shopId));
-                parameters.Add(new NpgsqlParameter(":name", name));
-                parameters.Add(new NpgsqlParameter(":price", price));
+                bool shopIdParse = int.TryParse(shopId, out _);
+                bool priceParse = decimal.TryParse(price, out _);
 
-                var affectedRowsCount = cmd.ExecuteNonQuery().ToString();
+                if (shopIdParse && priceParse)
+                {
+                    using var cmd = new NpgsqlCommand(sql, connection);
+                    var parameters = cmd.Parameters;
+                    parameters.Add(new NpgsqlParameter(":salesmanId", shopId));
+                    parameters.Add(new NpgsqlParameter(":name", name));
+                    parameters.Add(new NpgsqlParameter(":price", price));
 
-                Console.WriteLine($"Добавлена строка в product: {affectedRowsCount}");
+                    var affectedRowsCount = cmd.ExecuteNonQuery().ToString();
+
+                    Console.WriteLine($"Добавлена строка в product: {affectedRowsCount}");
+                }
+                else
+                {
+                    Console.WriteLine($"Не корректный тип данных");
+                }
 
                 return;
             }
@@ -89,38 +99,31 @@ namespace HW2_CSharpProfessional
                 Console.WriteLine("Введите кол-во товара:");
                 var count = Console.ReadLine();
 
-                using var cmd = new NpgsqlCommand(sql, connection);
-                var parameters = cmd.Parameters;
-                parameters.Add(new NpgsqlParameter(":firstName", firstName));
-                parameters.Add(new NpgsqlParameter(":secondName", secondName));
-                parameters.Add(new NpgsqlParameter(":email", email));
-                parameters.Add(new NpgsqlParameter(":productId", productId));
-                parameters.Add(new NpgsqlParameter(":count", count));
 
-                var affectedRowsCount = cmd.ExecuteNonQuery().ToString();
+                bool productIdParse = int.TryParse(productId, out _);
+                bool countParse = int.TryParse(count, out _);
 
-                Console.WriteLine($"Добавлена строка в buyer: {affectedRowsCount}");
+                if (productIdParse && countParse)
+                {
+                    using var cmd = new NpgsqlCommand(sql, connection);
+                    var parameters = cmd.Parameters;
+                    parameters.Add(new NpgsqlParameter(":firstName", firstName));
+                    parameters.Add(new NpgsqlParameter(":secondName", secondName));
+                    parameters.Add(new NpgsqlParameter(":email", email));
+                    parameters.Add(new NpgsqlParameter(":productId", productId));
+                    parameters.Add(new NpgsqlParameter(":count", count));
 
+                    var affectedRowsCount = cmd.ExecuteNonQuery().ToString();
+
+                    Console.WriteLine($"Добавлена строка в buyer: {affectedRowsCount}");
+                }
+                else
+                {
+                    Console.WriteLine($"Не корректный тип данных");
+                }
                 return;
             }
         }
 
-        static void Insert(string sql)
-        {
-            var connectionString = DBConnection.ConnectionString();
-            using var connection = new NpgsqlConnection(connectionString);
-            connection.Open();
-
-            using var cmd1 = new NpgsqlCommand(sql, connection);
-            var parameters = cmd1.Parameters;
-            parameters.Add(new NpgsqlParameter(":shop", "Иван"));
-            parameters.Add(new NpgsqlParameter("last_name", "Петров"));
-            parameters.Add(new NpgsqlParameter("middle_name", "Петрович"));
-            parameters.Add(new NpgsqlParameter("email", "petr@yandex.ru"));
-
-            var affectedRowsCount = cmd1.ExecuteNonQuery().ToString();
-
-            Console.WriteLine($"Insert into CLIENTS table. Affected rows count: {affectedRowsCount}");
-        }
     }
 }
