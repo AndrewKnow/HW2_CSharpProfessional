@@ -47,7 +47,7 @@ namespace HW2_CSharpProfessional
                 connection.QueryFirstOrDefault<Product>(sql2, new
                 {
                     @salesmanId = rnd.Next(salesmanMinId, salesmanMaxId),
-                    @name = $"Товар {i}",
+                    @name = $"Товар {rnd.Next(1, 100)}",
                     @price = rnd.Next(100, 1000)
                 });
             }
@@ -64,8 +64,8 @@ namespace HW2_CSharpProfessional
                 var sql3 = @"INSERT INTO buyer(first_name, second_name, email, product_id, count) VALUES (@firstName, @secondName, @email, @productId, @count);";
                 connection.QueryFirstOrDefault<Buyer>(sql3, new
                 {
-                    @firstName = $"Имя {i}",
-                    @secondName = $"Фамилия {i}",
+                    @firstName = $"Имя {rnd.Next(1, 100)}",
+                    @secondName = $"Фамилия {rnd.Next(1, 100)}",
                     @email = $"email{i}@otus.ru",
                     @productId = rnd.Next(productMinId, productMaxId),
                     @count = rnd.Next(1, 3)
@@ -93,7 +93,7 @@ namespace HW2_CSharpProfessional
                             id              BIGINT                      NOT NULL    DEFAULT NEXTVAL('salesman_id_seq'),
                             shop            CHARACTER VARYING(255)      NOT NULL,
                           
-                            CONSTRAINT salesman_pkey PRIMARY KEY (id),
+                            CONSTRAINT salesman_pkey PRIMARY KEY (id)
                         );
                         
                         CREATE INDEX salesman_shop_idx ON salesman(shop);
@@ -129,9 +129,9 @@ namespace HW2_CSharpProfessional
                             count           INTEGER                     NULL,
 
                             CONSTRAINT buyer_pkey PRIMARY KEY (id),
-                            CONSTRAINT buyer_fk_product_id FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE SET NULL,
+                            CONSTRAINT buyer_fk_product_id FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE SET NULL
                         );
-                        CREATE UNIQUE INDEX buyer_email_unq_idx ON buyer(lower(email));
+                        CREATE INDEX buyer_email_unq_idx ON buyer(lower(email));
                         ";
 
                 var sql = $"BEGIN;\nSAVEPOINT my_savepoint;\n{sql1}\n{sql2}\n{sql3}\nCOMMIT;";
