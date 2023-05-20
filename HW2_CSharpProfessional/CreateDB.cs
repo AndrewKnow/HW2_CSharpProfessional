@@ -137,7 +137,7 @@ namespace HW2_CSharpProfessional
                 var sql = $"BEGIN;\nSAVEPOINT my_savepoint;\n{sql1}\n{sql2}\n{sql3}\nCOMMIT;";
 
                 using var cmd = new NpgsqlCommand(sql, connection);
-                cmd.ExecuteNonQuery().ToString();
+                cmd.ExecuteNonQuery();
 
                 Console.WriteLine("Таблицы созданы");
             }
